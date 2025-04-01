@@ -1,87 +1,71 @@
 // -----------Log in og register ---------------------------------------------------------------------------------------------------------
-function login() {
-    const username = document.getElementById('login-username').value;
-    const password = document.getElementById('login-password').value;
-    if (username && password) {
-        alert('Login succesfuld for ' + username);
-        window.location.href = "index.html"; // Skift til den ønskede side
-    } else {
-        alert('Udfyld alle felter');
-    }
-}
 
-function register() {
-    const username = document.getElementById('register-username').value;
-    const password = document.getElementById('register-password').value;
-    if (username && password) {
-        alert('Registrering succesfuld for ' + username);
-        window.location.href = "index.html"; // Skift til den ønskede side
-    } else {
-        alert('Udfyld alle felter');
-    }
-}
 
 // -------------------------------------------------------------------------------------------------------------------------------------
 // --------------------------- Form validerings ----------------------------------------------------------------------------------------
-    document.getElementById('firstname').addEventListener('input', validateFirstName);
-    document.getElementById('lastname').addEventListener('input', validateLastName);
-    document.getElementById('address').addEventListener('input', validateAddress);
-    document.getElementById('zipcode').addEventListener('input', validateZipcode);
-    document.getElementById('email').addEventListener('input', validateEmail);
 
-    function validateFirstName() {
-        const firstName = document.getElementById('firstname').value;
-        if (firstName.length < 2) {
-            // alert('Fornavn skal være mindst 2 karakterer');
-        }
-    }
-
-    function validateLastName() {
-        const lastName = document.getElementById('lastname').value;
-        if (lastName.length < 2) {
-            // alert('Efternavn skal være mindst 2 karakterer');
-        }
-    }
-
-    function validateAddress() {
-        const address = document.getElementById('address').value;
-        if (address.length < 5) {
-            // alert('Adresse skal være mindst 5 karakterer');
-        }
-    }
-
-    function validateZipcode() {
-        const zipcode = document.getElementById('zipcode').value;
-        if (!/^\d+$/.test(zipcode)) {
-            // alert('Postnummer skal kun indeholde tal');
-        }
-    }
-
-    function validateEmail() {
-        const email = document.getElementById('email').value;
-        const pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (!pattern.test(email)) {
-            // alert('Indtast en gyldig emailadresse');
-        }
-    }
-
-    document.getElementById('myForm').addEventListener('submit', function(e) {
-        e.preventDefault(); // Stop formularet fra at blive sendt, før validering
-        validateForm();
-    });
-
-    function validateForm() {
-        const firstName = document.getElementById('firstname').value;
-        const lastName = document.getElementById('lastname').value;
-        const address = document.getElementById('address').value;
-        const zipcode = document.getElementById('zipcode').value;
-        const email = document.getElementById('email').value;
-
-        if (firstName.length >= 2 && lastName.length >= 2 && address.length >= 5 && /^\d+$/.test(zipcode) && /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-            alert('Formularen er valideret korrekt');
-            // Eventuelt sende formularen eller noget andet
-        } else {
-            alert('Udfyld venligst alle felter korrekt');
-        }
-    }
 // --------------------------------------------------------------------------------------------------------------------------------------
+const modal = document.getElementById("loginModal");
+const openBtn = document.getElementById("openLoginModal");
+const closeBtn = document.querySelector(".close");
+const loginBtn = document.getElementById("loginBtn");
+
+const usernameInput = document.getElementById("login-username");
+const passwordInput = document.getElementById("login-password");
+
+const usernameError = document.getElementById("username-error");
+const passwordError = document.getElementById("password-error");
+
+// Åbn modal automatisk ved sideindlæsning
+setTimeout(() => {
+    modal.style.display = "flex";
+    setTimeout(() => modal.classList.add("show"), 10);
+}, 500); // 500ms forsinkelse for en bedre effekt
+
+// Luk modal med slide-out effekt
+function closeModal() {
+    modal.classList.add("hide");
+    setTimeout(() => {
+        modal.classList.remove("show", "hide");
+        modal.style.display = "none";
+    }, 400);
+}
+
+closeBtn.addEventListener("click", closeModal);
+window.addEventListener("click", function (event) {
+    if (event.target === modal) {
+        closeModal();
+    }
+});
+
+// Validering
+function validateUsername() {
+    if (usernameInput.value.length < 3) {
+        usernameError.textContent = "Brugernavn skal være mindst 3 tegn.";
+        return false;
+    } else {
+        usernameError.textContent = "";
+        return true;
+    }
+}
+
+function validatePassword() {
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+    if (!passwordPattern.test(passwordInput.value)) {
+        passwordError.textContent = "Adgangskoden skal være mindst 6 tegn og indeholde både bogstaver og tal.";
+        return false;
+    } else {
+        passwordError.textContent = "";
+        return true;
+    }
+}
+
+usernameInput.addEventListener("input", validateUsername);
+passwordInput.addEventListener("input", validatePassword);
+
+loginBtn.addEventListener("click", function () {
+    if (validateUsername() && validatePassword()) {
+        alert("Login succesfuld!");
+        closeModal();
+    }
+});

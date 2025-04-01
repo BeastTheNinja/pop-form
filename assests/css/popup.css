@@ -41,3 +41,23 @@
     transform: translateY(-100%);
     opacity: 0;
 }
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    display: block;
+    height: 16px; /* Sørger for, at layoutet ikke hopper */
+    margin-bottom: 5px;
+}
+
+/* Gør modal skjult, men synlig i baggrunden, når siden loader */
+.modal {
+    display: flex;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+}
+
+/* Når modal åbnes, bliver den synlig */
+.modal.show {
+    opacity: 1;
+}
