@@ -58,7 +58,6 @@
 
     loginBtn.addEventListener("click", function () {
         if (validateUsername() && validatePassword()) {
-            alert("Login succesfuld!");
             closeModal();
         }
     });
